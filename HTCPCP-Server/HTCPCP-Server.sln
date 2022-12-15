@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTCPCP-Server", "HTCPCP-Server\HTCPCP-Server.csproj", "{15D1D114-7FFE-4A95-9560-1A94A7BF017E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug-Export|Any CPU = Debug-Export|Any CPU
+		Debug-Load|Any CPU = Debug-Load|Any CPU
+		Debug-Start|Any CPU = Debug-Start|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15D1D114-7FFE-4A95-9560-1A94A7BF017E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15D1D114-7FFE-4A95-9560-1A94A7BF017E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15D1D114-7FFE-4A95-9560-1A94A7BF017E}.Debug-Export|Any CPU.ActiveCfg = Debug-Start|Any CPU
+		{15D1D114-7FFE-4A95-9560-1A94A7BF017E}.Debug-Export|Any CPU.Build.0 = Debug-Start|Any CPU
+		{15D1D114-7FFE-4A95-9560-1A94A7BF017E}.Debug-Load|Any CPU.ActiveCfg = Debug-Load|Any CPU
+		{15D1D114-7FFE-4A95-9560-1A94A7BF017E}.Debug-Load|Any CPU.Build.0 = Debug-Load|Any CPU
+		{15D1D114-7FFE-4A95-9560-1A94A7BF017E}.Debug-Start|Any CPU.ActiveCfg = Debug-Start|Any CPU
+		{15D1D114-7FFE-4A95-9560-1A94A7BF017E}.Debug-Start|Any CPU.Build.0 = Debug-Start|Any CPU
+		{15D1D114-7FFE-4A95-9560-1A94A7BF017E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15D1D114-7FFE-4A95-9560-1A94A7BF017E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FFF952E3-5C62-4D27-ADF5-3AD7C9BDC78F}
+	EndGlobalSection
+EndGlobal

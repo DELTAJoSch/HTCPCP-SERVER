@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "H9dYHKK0cgDXCJ4btP0lzeWBmQ2TrLcrET4dfBL2wrLu+x5MHFJufl7MkUu5aa1wbNPykLCZx7CNKGyNyr/5gQ==",
+  "success": true,
+  "projectFilePath": "H:\\Dokumente\\#GIT\\htcpcp\\HTCPCP-SERVER\\HTCPCP-Server\\HTCPCP-Server\\HTCPCP-Server.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\spectre.console\\0.45.0\\spectre.console.0.45.0.nupkg.sha512",
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\system.commandline\\2.0.0-beta4.22272.1\\system.commandline.2.0.0-beta4.22272.1.nupkg.sha512",
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512"
+  ],
+  "logs": []
+}
