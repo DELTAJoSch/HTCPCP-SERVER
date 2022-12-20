@@ -1,4 +1,6 @@
-﻿using HTCPCP_Server.Logging;
+﻿using HTCPCP_Server.Database.Implementations;
+using HTCPCP_Server.Database.Interfaces;
+using HTCPCP_Server.Logging;
 using Spectre.Console;
 using System.CommandLine;
 using System.CommandLine.Builder;
@@ -86,12 +88,16 @@ internal class Program
     /// <summary>
     /// Loads a file into the database
     /// </summary>
-    /// <param name="load">The file to load</param>
+    /// <param name="load">The file to Load</param>
     /// <param name="verbose">Enable verbose logging</param>
     /// <returns>Returns 0 on success</returns>
     internal static async Task load(FileInfo? load,bool verbose = false) {
-        throw new Exception("Test");
         AnsiConsole.MarkupLine($"[underline fuchsia]Load Called:[/] File: {load?.Name}, Verbose: {verbose}");
+
+
+
+        IDatabaseDriver databaseDriver = new SQLiteDriver();
+        databaseDriver.Dispose();
     }
 
     /// <summary>
