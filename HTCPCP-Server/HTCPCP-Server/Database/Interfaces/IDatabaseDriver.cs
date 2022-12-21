@@ -48,16 +48,15 @@ namespace HTCPCP_Server.Database.Interfaces
         /// <summary>
         /// Gets the entire database as a Dict(pot --> Dict(option --> count))
         /// </summary>
-        /// <returns>Returns the database as a dict</returns>
-        /// <exception cref="ConnectionLostException">if connection is lost</exception>
-        Task<Dictionary<string, Dictionary<Option, int>>> GetAsDict();
+        /// <returns>Returns the database as a dict or null if not possible</returns>
+        Task<Dictionary<string, Dictionary<Option, int>>?> GetAsDict();
 
         /// <summary>
         /// Loads the dictionary into the database.
         /// Replaces existing content
         /// </summary>
         /// <param name="dict">The Dict(pot --> Dict(option --> count))</param>
-        /// <exception cref="ConnectionLostException">if connection is lost</exception>
-        Task InitDb(Dictionary<string, Dictionary<Option, int>> dict);
+        /// <returns>Returns true if successful</returns>
+        Task<bool> InitDb(Dictionary<string, Dictionary<Option, int>> dict);
     }
 }

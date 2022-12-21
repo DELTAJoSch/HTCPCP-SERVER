@@ -1,5 +1,6 @@
 ﻿using HTCPCP_Server.Database.Implementations;
 using HTCPCP_Server.Database.Interfaces;
+using HTCPCP_Server.Helpers;
 using HTCPCP_Server.Logging;
 using Spectre.Console;
 using System.CommandLine;
@@ -94,9 +95,32 @@ internal class Program
     internal static async Task load(FileInfo? load,bool verbose = false) {
         AnsiConsole.MarkupLine($"[underline fuchsia]Load Called:[/] File: {load?.Name}, Verbose: {verbose}");
 
-
-
+        if (load == null) {
+            Log.Info("File is null!");
+            return;
+        }
+        
         IDatabaseDriver databaseDriver = new SQLiteDriver();
+        IDatabaseManager? manager = DbManagerCreationHelper.CreateFromFileType(load, databaseDriver);
+
+        if(manager == null)
+        {
+            Log.Info("No valid parser was found for file type.");
+            databaseDriver.Dispose();
+            return;
+        }
+
+        var res = await manager.Load(load);
+
+        if (res)
+        {
+            Log.Info("Success! File was loaded.");
+        }
+        else 
+        {
+            Log.Info("File was not loaded!");
+        }
+
         databaseDriver.Dispose();
     }
 

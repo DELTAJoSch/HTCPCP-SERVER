@@ -11,8 +11,8 @@ namespace HTCPCP_Server.Database.Implementations
     /// <summary>
     /// A Database Manager for XML files
     /// </summary>
-    [FileExtension("xml")]
-    [FileExtension("XML")]
+    [FileExtension(".xml")]
+    [FileExtension(".XML")]
     internal class XMLManager : IDatabaseManager
     {
         private IDatabaseDriver driver;
@@ -35,7 +35,7 @@ namespace HTCPCP_Server.Database.Implementations
         /// <exception cref="NotImplementedException"></exception>
         public async Task<bool> Load(FileInfo file)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         /// <summary>

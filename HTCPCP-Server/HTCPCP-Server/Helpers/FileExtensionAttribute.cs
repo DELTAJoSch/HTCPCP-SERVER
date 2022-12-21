@@ -14,6 +14,8 @@ namespace HTCPCP_Server.Helpers
     {
         private string extension;
 
+        public string Extension { get { return this.extension; } }
+
         public FileExtensionAttribute(string extension)
         {
             this.extension = extension;
