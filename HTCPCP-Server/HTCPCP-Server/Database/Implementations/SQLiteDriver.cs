@@ -33,7 +33,7 @@ namespace HTCPCP_Server.Database.Implementations
         /// <inheritdoc/>
         public async Task Add(Option option, string pot, int count = 1)
         {
-            throw new NotImplementedException();
+            await this.ConsumeOrAdd(option, pot, count, true);
         }
 
         /// <inheritdoc/>
@@ -45,7 +45,66 @@ namespace HTCPCP_Server.Database.Implementations
         /// <inheritdoc/>
         public async Task<bool> Consume(Option option, string pot, int count)
         {
-            throw new NotImplementedException();
+            return await this.ConsumeOrAdd(option, pot, count);
+        }
+
+        /// <summary>
+        /// Consume or add to the given pot and option
+        /// </summary>
+        /// <param name="option">The option</param>
+        /// <param name="pot">The pot</param>
+        /// <param name="count">The number of elements to add or add</param>
+        /// <param name="add">If false, consume count, otherwise add</param>
+        /// <returns>Returns true if successful</returns>
+        private async Task<bool> ConsumeOrAdd(Option option, string pot, int count, bool add = false) {
+            string select = "SELECT * FROM Options WHERE (pot = $pt) AND (opt = $ot)";
+            SqliteCommand selectCommand = new SqliteCommand(select, this.connection);
+            selectCommand.Parameters.AddWithValue("$pt", pot);
+            selectCommand.Parameters.AddWithValue("$ot", option.ToString());
+
+            try
+            {
+                var reader = await selectCommand.ExecuteReaderAsync();
+                if (reader.Read())
+                {
+                    var cnt = reader.GetInt32(2);
+
+                    if (add)
+                    {
+                        cnt += count;
+                    }
+                    else
+                    {
+                        if (cnt - count >= 0)
+                        {
+                            cnt -= count;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+
+                    string insert = "UPDATE Options SET cnt = $ct WHERE (pot = $pt) AND (opt = $ot)";
+                    SqliteCommand insertCommand = new SqliteCommand(insert, this.connection);
+                    insertCommand.Parameters.AddWithValue("$pt", pot);
+                    insertCommand.Parameters.AddWithValue("$ot", option.ToString());
+                    insertCommand.Parameters.AddWithValue("$ct", cnt);
+
+                    await insertCommand.ExecuteNonQueryAsync();
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (SqliteException e)
+            {
+                Log.Error($"Failed to read: ({e.SqliteErrorCode}, {e.Message}, {e.SqlState})");
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -79,7 +138,7 @@ namespace HTCPCP_Server.Database.Implementations
             }
             catch (SqliteException e)
             {
-                Log.Error($"Failed to start transaction: ({e.SqliteErrorCode}, {e.Message}, {e.SqlState})");
+                Log.Error($"Failed to read: ({e.SqliteErrorCode}, {e.Message}, {e.SqlState})");
                 return null;
             }
 
@@ -150,11 +209,8 @@ namespace HTCPCP_Server.Database.Implementations
                 return false;
             }
 
-            string insertCommand = "INSERT INTO Options @pot, @opt, @cnt";
+            string insertCommand = "INSERT INTO Options $pot, $opt, $cnt";
             SqliteCommand insert = new SqliteCommand(insertCommand, this.connection, transaction);
-            insert.Parameters.Add("@pot", SqliteType.Text);
-            insert.Parameters.Add("@opt", SqliteType.Text);
-            insert.Parameters.Add("@cnt", SqliteType.Integer);
 
             try
             {
@@ -162,15 +218,16 @@ namespace HTCPCP_Server.Database.Implementations
                     .ToList()
                     .ForEach(x =>
                     {
-                        insert.Parameters["@pot"].Value = x.Key;
                         x.Value.AsEnumerable()
                             .ToList()
                             .ForEach(async y =>
                             {
                                 try
                                 {
-                                    insert.Parameters["@opt"].Value = y.Key.ToString();
-                                    insert.Parameters["@cnt"].Value = y.Value;
+                                    insert.Parameters.Clear();
+                                    insert.Parameters.AddWithValue("$pot", x.Key);
+                                    insert.Parameters.AddWithValue("$opt", y.Key.ToString());
+                                    insert.Parameters.AddWithValue("$cnt", y.Value);
                                     await insert.ExecuteReaderAsync();
                                 }
                                 catch (SqliteException e)
