@@ -2,6 +2,7 @@
 using HTCPCP_Server.Database.Interfaces;
 using HTCPCP_Server.Helpers;
 using HTCPCP_Server.Logging;
+using HTCPCP_Server.Server.Implementations;
 using Spectre.Console;
 using System.CommandLine;
 using System.CommandLine.Builder;
@@ -25,12 +26,12 @@ internal class Program
         verboseOption.AddAlias("-v");
         verboseOption.Arity = ArgumentArity.ZeroOrOne;
 
-        var configOption = new Option<FileInfo?>(name: "--endpoint", description: "The config file");
-        configOption.SetDefaultValue(null);
-        configOption.AddAlias("-e");
+        var portOption = new Option<int?>(name: "--port", description: "The port to listen on");
+        portOption.SetDefaultValue(null);
+        portOption.AddAlias("-p");
 
-        var startCommand = new Command("start", "Starts the server") { 
-            configOption,
+        var startCommand = new Command("start", "Starts the server") {
+            portOption,
             verboseOption
         };
 
@@ -48,9 +49,9 @@ internal class Program
         root.AddCommand(exportCommand);
         root.AddCommand(loadCommand);
 
-        loadCommand.SetHandler(async (file, verbose) => { await load(file, verbose); }, fileOption, verboseOption);
-        exportCommand.SetHandler(async (file, verbose) => { await export(file, verbose); }, fileOption, verboseOption);
-        startCommand.SetHandler(async (config, verbose) => { await start(config, verbose); }, configOption, verboseOption);
+        loadCommand.SetHandler(async (file, verbose) => { await Load(file, verbose); }, fileOption, verboseOption);
+        exportCommand.SetHandler(async (file, verbose) => { await Export(file, verbose); }, fileOption, verboseOption);
+        startCommand.SetHandler(async (port, verbose) => { await Start(port, verbose); }, portOption, verboseOption);
 
         return new CommandLineBuilder(root)
             .UseHelp()
@@ -92,7 +93,7 @@ internal class Program
     /// <param name="load">The file to Load</param>
     /// <param name="verbose">Enable verbose logging</param>
     /// <returns>Returns 0 on success</returns>
-    internal static async Task load(FileInfo? load,bool verbose = false) {
+    internal static async Task Load(FileInfo? load,bool verbose = false) {
         AnsiConsole.MarkupLine($"[underline fuchsia]Load Called:[/] File: {load?.Name}, Verbose: {verbose}");
 
         if (load == null) {
@@ -130,11 +131,57 @@ internal class Program
     /// <param name="export">The file to export to</param>
     /// <param name="verbose">Enable verbose logging</param>
     /// <returns>Returns 0 on success</returns>
-    internal static async Task export(FileInfo? export, bool verbose = false) {
-        AnsiConsole.MarkupLine($"[underline turqouise1]Export Called:[/] File: {export?.Name}, Verbose: {verbose}");
+    internal static async Task Export(FileInfo? export, bool verbose = false) {
+        AnsiConsole.MarkupLine($"[underline turquoise2]Export Called:[/] File: {export?.Name}, Verbose: {verbose}");
+
+        if (export == null)
+        {
+            Log.Info("No file!");
+            return;
+        }
+
+        IDatabaseDriver databaseDriver = new SQLiteDriver();
+
+        IDatabaseManager? manager = DbManagerCreationHelper.CreateFromFileType(export, databaseDriver);
+        if(manager == null)
+        {
+            Log.Info("No parser found for file type");
+            return;
+        }
+
+        await manager.Save(export);
+
+        databaseDriver.Dispose();
     }
 
-    internal static async Task start(FileInfo? config, bool verbose = false) {
-        AnsiConsole.MarkupLine($"[underline orange1]Start Called:[/] File: {config?.Name}, Verbose: {verbose}");
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="port"></param>
+    /// <param name="verbose"></param>
+    /// <returns></returns>
+    internal static async Task Start(int? port, bool verbose = false) {
+        if(port == null)
+        {
+            port = 80;
+        }
+        AnsiConsole.MarkupLine($"[underline orange1]Start Called:[/] Port: {port}, Verbose: {verbose}");
+
+        Log.IsVerbose = verbose;
+
+        var server = new Server();
+        var dbdriver = new SQLiteDriver();
+        if (server.Start(port.Value, dbdriver))
+        {
+            while (true)
+            {
+                var res = CommandExecutor.HandleCommand();
+                if (res == HTCPCP_Server.Enumerations.Command.COMEXIT)
+                {
+                    server.Stop();
+                    break;
+                }
+            }
+        }
     }
 }

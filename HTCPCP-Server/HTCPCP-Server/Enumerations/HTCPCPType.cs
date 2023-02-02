@@ -16,6 +16,7 @@ namespace HTCPCP_Server.Enumerations
         Put,
         Brew,
         Propfind,
-        When
+        When,
+        Unknown
     }
 }

@@ -128,12 +128,17 @@ namespace HTCPCP_Server.Database.Implementations
                 var reader = await get.ExecuteReaderAsync();
                 while(reader.Read())
                 {
+                    // get value for pot (null if not yet created) and add or create dictionary. Then add it to res, if it is not already part of it
                     var pot = res.GetValueOrDefault(reader.GetString(0));
                     if (pot == null)
                         pot = new Dictionary<Option, int>();
 
                     pot.Add((Option)Enum.Parse(typeof(Option), reader.GetString(1)), reader.GetInt32(2));
-                    res.Add(reader.GetString(0), pot);
+
+                    if (!res.ContainsKey(reader.GetString(0))) 
+                    {
+                        res.Add(reader.GetString(0), pot);
+                    }
                 }
             }
             catch (SqliteException e)
@@ -209,7 +214,7 @@ namespace HTCPCP_Server.Database.Implementations
                 return false;
             }
 
-            string insertCommand = "INSERT INTO Options $pot, $opt, $cnt";
+            string insertCommand = "INSERT INTO Options VALUES ($pot, $opt, $cnt)";
             SqliteCommand insert = new SqliteCommand(insertCommand, this.connection, transaction);
 
             try
@@ -228,7 +233,7 @@ namespace HTCPCP_Server.Database.Implementations
                                     insert.Parameters.AddWithValue("$pot", x.Key);
                                     insert.Parameters.AddWithValue("$opt", y.Key.ToString());
                                     insert.Parameters.AddWithValue("$cnt", y.Value);
-                                    await insert.ExecuteReaderAsync();
+                                    await insert.ExecuteNonQueryAsync();
                                 }
                                 catch (SqliteException e)
                                 {

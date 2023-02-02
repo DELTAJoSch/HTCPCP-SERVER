@@ -4,6 +4,6 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup>
-    <ActiveDebugProfile>load</ActiveDebugProfile>
+    <ActiveDebugProfile>start</ActiveDebugProfile>
   </PropertyGroup>
 </Project>

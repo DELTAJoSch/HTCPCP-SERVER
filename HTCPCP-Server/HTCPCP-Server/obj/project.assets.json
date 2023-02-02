@@ -511,19 +511,26 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Johannes\\.nuget\\packages\\": {}
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Johannes\\Documents\\#GIT\\HTCPCP-SERVER\\HTCPCP-Server\\HTCPCP-Server\\HTCPCP-Server.csproj",
+      "projectUniqueName": "H:\\Dokumente\\#GIT\\htcpcp\\HTCPCP-SERVER\\HTCPCP-Server\\HTCPCP-Server\\HTCPCP-Server.csproj",
       "projectName": "HTCPCP-Server",
-      "projectPath": "C:\\Users\\Johannes\\Documents\\#GIT\\HTCPCP-SERVER\\HTCPCP-Server\\HTCPCP-Server\\HTCPCP-Server.csproj",
-      "packagesPath": "C:\\Users\\Johannes\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Johannes\\Documents\\#GIT\\HTCPCP-SERVER\\HTCPCP-Server\\HTCPCP-Server\\obj\\",
+      "projectPath": "H:\\Dokumente\\#GIT\\htcpcp\\HTCPCP-SERVER\\HTCPCP-Server\\HTCPCP-Server\\HTCPCP-Server.csproj",
+      "packagesPath": "C:\\Users\\Deltazocker\\.nuget\\packages\\",
+      "outputPath": "H:\\Dokumente\\#GIT\\htcpcp\\HTCPCP-SERVER\\HTCPCP-Server\\HTCPCP-Server\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Johannes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Deltazocker\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -531,6 +538,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

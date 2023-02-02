@@ -13,6 +13,8 @@ namespace HTCPCP_Server.Logging
     /// </summary>
     public class Log
     {
+        public static bool IsVerbose { get; set; }
+
         /// <summary>
         /// The loggers the log uses
         /// </summary>
@@ -34,6 +36,16 @@ namespace HTCPCP_Server.Logging
         public static void Info(string message)
         {
             loggers.ForEach(logger => logger.Info(message));
+        }
+
+        /// <summary>
+        /// Logs an verbose info message
+        /// </summary>
+        /// <param name="message">The message to log</param>
+        public static void Verbose(string message)
+        {
+            if(IsVerbose)
+                loggers.ForEach(logger => logger.Info(message + "\nCMD> "));
         }
 
         /// <summary>

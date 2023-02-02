@@ -2,11 +2,7 @@
 using HTCPCP_Server.Enumerations;
 using HTCPCP_Server.Helpers;
 using HTCPCP_Server.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.CommandLine;
 using System.Xml;
 
 namespace HTCPCP_Server.Database.Implementations
@@ -46,41 +42,52 @@ namespace HTCPCP_Server.Database.Implementations
             return await this.driver.InitDb(dict);
         }
 
-        private async Task<Dictionary<string, Dictionary<Option, int>>?> ReadFile(FileInfo info) 
+        /// <summary>
+        /// Reads and parses a xml option file
+        /// </summary>
+        /// <param name="info">The file to parse</param>
+        /// <returns>Returns a dictionary over all pots</returns>
+        private async Task<Dictionary<string, Dictionary<Enumerations.Option, int>>?> ReadFile(FileInfo info)
         {
-            if (!info.Exists) 
+            if (!info.Exists)
             {
                 Log.Info("File not found!");
                 return null;
             }
 
-            var dict = new Dictionary<string, Dictionary<Option, int>>();
+            var dict = new Dictionary<string, Dictionary<Enumerations.Option, int>>();
             XmlDocument doc = new XmlDocument();
             try
             {
                 doc.Load(info.FullName);
 
-                foreach (XmlNode node in doc.ChildNodes)
+                foreach (XmlNode child in doc.ChildNodes)
                 {
-                    if (node.Name == "additions") 
+                    if (child.Name == "options")
                     {
-                        var pot = node.Attributes?.GetNamedItem("pot")?.InnerText;
-                        if (pot == null) 
+                        foreach (XmlNode node in child)
                         {
-                            Log.Info("No pot name specified!");
-                            continue;                        
-                        }
-
-                        var potDict = new Dictionary<Option, int>();
-                        foreach(var add in node.ChildNodes) 
-                        {
-                            if (node.Name == "addition")
+                            if (node.Name == "additions")
                             {
-                                this.parseAddition(node, potDict);
+                                var pot = node.Attributes?.GetNamedItem("pot")?.InnerText;
+                                if (pot == null)
+                                {
+                                    Log.Info("No pot name specified!");
+                                    continue;
+                                }
+
+                                var potDict = new Dictionary<Enumerations.Option, int>();
+                                foreach (XmlNode add in node.ChildNodes)
+                                {
+                                    if (add.Name == "addition")
+                                    {
+                                        this.parseAddition(add, potDict);
+                                    }
+                                }
+
+                                dict.Add(pot, potDict);
                             }
                         }
-
-                        dict.Add(pot, potDict);
                     }
                 }
             }
@@ -89,7 +96,7 @@ namespace HTCPCP_Server.Database.Implementations
                 Log.Info($"File does not contain valid xml!\n{e.Message}\n@ Line {e.LineNumber} @ Position {e.LinePosition}");
                 return null;
             }
-            catch(UnauthorizedAccessException e)
+            catch (UnauthorizedAccessException e)
             {
                 Log.Info($"File could not be accessed!\n{e.Message}");
                 return null;
@@ -98,8 +105,13 @@ namespace HTCPCP_Server.Database.Implementations
             return dict;
         }
 
-
-        private bool parseAddition(XmlNode node, Dictionary<Option, int> dict) 
+        /// <summary>
+        /// Parses an addition node
+        /// </summary>
+        /// <param name="node">The XmlNode to parse</param>
+        /// <param name="dict">The dictionary to add to</param>
+        /// <returns>Returns true if the node is parseable</returns>
+        private bool parseAddition(XmlNode node, Dictionary<Enumerations.Option, int> dict)
         {
             if (node.Name == "addition")
             {
@@ -110,11 +122,11 @@ namespace HTCPCP_Server.Database.Implementations
                     return false;
                 }
 
-                Option opt;
+                Enumerations.Option opt;
 
                 try
                 {
-                    opt = (Option)Enum.Parse(typeof(Option), type);
+                    opt = (Enumerations.Option)Enum.Parse(typeof(Enumerations.Option), type);
                 }
                 catch (ArgumentException)
                 {
@@ -135,7 +147,7 @@ namespace HTCPCP_Server.Database.Implementations
             {
                 Log.Info($"Unexpected Node: {node.Name}");
             }
-            return true;        
+            return true;
         }
 
         /// <summary>
@@ -146,7 +158,50 @@ namespace HTCPCP_Server.Database.Implementations
         /// <exception cref="NotImplementedException"></exception>
         public async Task<bool> Save(FileInfo file)
         {
-            throw new NotImplementedException();
+            if (file.IsReadOnly)
+            {
+                Log.Error("File is read-only!");
+                return false;
+            }
+
+            var dict = await this.driver.GetAsDict();
+
+            if (dict == null)
+            {
+                Log.Error("An error has occured - the database could not be exported!");
+                return false;
+            }
+
+            return await this.WriteToFile(dict, file);
+        }
+
+        private async Task<bool> WriteToFile(Dictionary<string, Dictionary<Enumerations.Option, int>> dict, FileInfo file)
+        {
+            using (StreamWriter writer = new StreamWriter(file.FullName, false))
+            {
+                await writer.WriteLineAsync("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                await writer.WriteLineAsync("<options>");
+
+                dict.AsEnumerable()
+                    .ToList()
+                    .ForEach(async pot =>
+                    {
+                        await writer.WriteLineAsync($"\t<additions pot=\"{pot.Key}\">");
+
+                        pot.Value.AsEnumerable()
+                            .ToList()
+                            .ForEach(async option =>
+                                await writer.WriteLineAsync($"\t\t<addition type=\"{option.Key}\">{option.Value}</addition>")
+                            );
+
+                        await writer.WriteLineAsync($"\t</additions>");
+
+                    });
+
+                await writer.WriteLineAsync("</options>");
+            }
+
+            return true;
         }
     }
 }

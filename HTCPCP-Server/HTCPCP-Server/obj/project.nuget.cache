@@ -1,19 +1,19 @@
 {
   "version": 2,
-  "dgSpecHash": "uKWXHf1dq5kEXp9i+LdJecX5KNTzGchB0UJ0RAhyerUKElffpDH+xhRr0wFW3wiw+CvtJSehZt2abCfQQNv8vQ==",
+  "dgSpecHash": "+Vp2HaV2n+vSb2a1p66TIc3MSaVozxDoexWOPnQhevanMs8m66NheoiNhWji7FwctF+k+nHNQ4bW9RrcMWYFJg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Johannes\\Documents\\#GIT\\HTCPCP-SERVER\\HTCPCP-Server\\HTCPCP-Server\\HTCPCP-Server.csproj",
+  "projectFilePath": "H:\\Dokumente\\#GIT\\htcpcp\\HTCPCP-SERVER\\HTCPCP-Server\\HTCPCP-Server\\HTCPCP-Server.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Johannes\\.nuget\\packages\\microsoft.data.sqlite\\7.0.1\\microsoft.data.sqlite.7.0.1.nupkg.sha512",
-    "C:\\Users\\Johannes\\.nuget\\packages\\microsoft.data.sqlite.core\\7.0.1\\microsoft.data.sqlite.core.7.0.1.nupkg.sha512",
-    "C:\\Users\\Johannes\\.nuget\\packages\\spectre.console\\0.45.0\\spectre.console.0.45.0.nupkg.sha512",
-    "C:\\Users\\Johannes\\.nuget\\packages\\sqlite\\3.13.0\\sqlite.3.13.0.nupkg.sha512",
-    "C:\\Users\\Johannes\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.2\\sqlitepclraw.bundle_e_sqlite3.2.1.2.nupkg.sha512",
-    "C:\\Users\\Johannes\\.nuget\\packages\\sqlitepclraw.core\\2.1.2\\sqlitepclraw.core.2.1.2.nupkg.sha512",
-    "C:\\Users\\Johannes\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.2\\sqlitepclraw.lib.e_sqlite3.2.1.2.nupkg.sha512",
-    "C:\\Users\\Johannes\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.2\\sqlitepclraw.provider.e_sqlite3.2.1.2.nupkg.sha512",
-    "C:\\Users\\Johannes\\.nuget\\packages\\system.commandline\\2.0.0-beta4.22272.1\\system.commandline.2.0.0-beta4.22272.1.nupkg.sha512",
-    "C:\\Users\\Johannes\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512"
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\microsoft.data.sqlite\\7.0.1\\microsoft.data.sqlite.7.0.1.nupkg.sha512",
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\microsoft.data.sqlite.core\\7.0.1\\microsoft.data.sqlite.core.7.0.1.nupkg.sha512",
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\spectre.console\\0.45.0\\spectre.console.0.45.0.nupkg.sha512",
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\sqlite\\3.13.0\\sqlite.3.13.0.nupkg.sha512",
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.2\\sqlitepclraw.bundle_e_sqlite3.2.1.2.nupkg.sha512",
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\sqlitepclraw.core\\2.1.2\\sqlitepclraw.core.2.1.2.nupkg.sha512",
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.2\\sqlitepclraw.lib.e_sqlite3.2.1.2.nupkg.sha512",
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.2\\sqlitepclraw.provider.e_sqlite3.2.1.2.nupkg.sha512",
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\system.commandline\\2.0.0-beta4.22272.1\\system.commandline.2.0.0-beta4.22272.1.nupkg.sha512",
+    "C:\\Users\\Deltazocker\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512"
   ],
   "logs": []
 }

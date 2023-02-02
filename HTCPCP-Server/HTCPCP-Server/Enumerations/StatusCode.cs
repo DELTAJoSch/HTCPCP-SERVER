@@ -15,7 +15,7 @@ namespace HTCPCP_Server.Enumerations
         Deprecated = 309,
         BadRequest = 400,
         NotAcceptable = 406,
-        Tepaot = 416,
+        Teapot = 416,
         UnavailableForLegalReasons = 451,
         NotImplemented = 501
     }
