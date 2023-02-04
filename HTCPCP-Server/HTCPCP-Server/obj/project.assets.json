@@ -267,6 +267,22 @@
           }
         }
       },
+      "System.Device.Gpio/2.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/System.Device.Gpio.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/System.Device.Gpio.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net5.0/System.Device.Gpio.targets": {}
+        }
+      },
       "System.Memory/4.5.5": {
         "type": "package",
         "compile": {
@@ -478,6 +494,26 @@
         "system.commandline.nuspec"
       ]
     },
+    "System.Device.Gpio/2.2.0": {
+      "sha512": "ShuBDkL/QlQvaeUXcTvtY8xnb0U/ueisVw3VcIgybmrHAl4BiQ/oZEi8yQFzb/xlzDc12AZ/J1oUE9AawV7Yag==",
+      "type": "package",
+      "path": "system.device.gpio/2.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net5.0/System.Device.Gpio.targets",
+        "lib/net6.0-windows10.0.17763/System.Device.Gpio.dll",
+        "lib/net6.0-windows10.0.17763/System.Device.Gpio.xml",
+        "lib/net6.0/System.Device.Gpio.dll",
+        "lib/net6.0/System.Device.Gpio.xml",
+        "lib/netstandard2.0/System.Device.Gpio.dll",
+        "lib/netstandard2.0/System.Device.Gpio.xml",
+        "system.device.gpio.2.2.0.nupkg.sha512",
+        "system.device.gpio.nuspec"
+      ]
+    },
     "System.Memory/4.5.5": {
       "sha512": "XIWiDvKPXaTveaB7HVganDlOCRoj03l+jrwNvcge/t8vhGYKvqV+dMv6G4SAX2NoNmN0wZfVPTAlFwZcZvVOUw==",
       "type": "package",
@@ -507,7 +543,8 @@
       "Microsoft.Data.Sqlite >= 7.0.1",
       "SQLite >= 3.13.0",
       "Spectre.Console >= 0.45.0",
-      "System.CommandLine >= 2.0.0-beta4.22272.1"
+      "System.CommandLine >= 2.0.0-beta4.22272.1",
+      "System.Device.Gpio >= 2.2.0"
     ]
   },
   "packageFolders": {
@@ -572,6 +609,10 @@
           "System.CommandLine": {
             "target": "Package",
             "version": "[2.0.0-beta4.22272.1, )"
+          },
+          "System.Device.Gpio": {
+            "target": "Package",
+            "version": "[2.2.0, )"
           }
         },
         "imports": [

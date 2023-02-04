@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
-    <additions pot="NAME">
+    <additions pot="pot-0">
         <addition type="Milk/Cream">5</addition>
         <addition type="Milk/Whole-Milk">2</addition>
         <addition type="Milk/Half-and-Half">4</addition>

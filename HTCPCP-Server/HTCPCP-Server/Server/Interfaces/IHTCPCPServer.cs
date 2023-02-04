@@ -1,4 +1,5 @@
 ﻿using HTCPCP_Server.Database.Interfaces;
+using HTCPCP_Server.Hardware.Interfaces;
 using HTCPCP_Server.Protocol;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,9 @@ namespace HTCPCP_Server.Server.Interfaces
         /// </summary>
         /// <param name="port">The port to listen on</param>
         /// <param name="db">The database driver to use</param>
+        /// <param name="coffee">The coffee maker</param>
         /// <returns>true if successful, otherwise false</returns>
-        bool Start(int port, IDatabaseDriver db);
+        bool Start(int port, IDatabaseDriver db, ICoffeeMaker coffee);
 
         /// <summary>
         /// Stops the server

@@ -31,21 +31,57 @@ namespace HTCPCP_Server.Database.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task Add(Option option, string pot, int count = 1)
+        public void Add(Option option, string pot, int count = 1)
         {
-            await this.ConsumeOrAdd(option, pot, count, true);
+            this.ConsumeOrAdd(option, pot, count, true);
         }
 
         /// <inheritdoc/>
-        public async Task<bool> Consume(Option option, string pot)
+        public bool Consume(Option option, string pot)
         {
-            return await this.Consume(option, pot, 1);
+            return this.Consume(option, pot, 1);
         }
 
         /// <inheritdoc/>
-        public async Task<bool> Consume(Option option, string pot, int count)
+        public bool Consume(Option option, string pot, int count)
         {
-            return await this.ConsumeOrAdd(option, pot, count);
+            return this.ConsumeOrAdd(option, pot, count);
+        }
+
+        /// <inheritdoc/>
+        public bool CheckAvailable(Option option, string pot, int count)
+        {
+            string select = "SELECT * FROM Options WHERE (pot = $pt) AND (opt = $ot)";
+            SqliteCommand selectCommand = new SqliteCommand(select, this.connection);
+            selectCommand.Parameters.AddWithValue("$pt", pot);
+            selectCommand.Parameters.AddWithValue("$ot", option.ToString());
+
+            try
+            {
+                var reader = selectCommand.ExecuteReader();
+                if (reader.Read())
+                {
+                    var cnt = reader.GetInt32(2);
+
+                    if (cnt - count >= 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (SqliteException e)
+            {
+                Log.Error($"Failed to read: ({e.SqliteErrorCode}, {e.Message}, {e.SqlState})");
+                return false;
+            }
         }
 
         /// <summary>
@@ -56,7 +92,7 @@ namespace HTCPCP_Server.Database.Implementations
         /// <param name="count">The number of elements to add or add</param>
         /// <param name="add">If false, consume count, otherwise add</param>
         /// <returns>Returns true if successful</returns>
-        private async Task<bool> ConsumeOrAdd(Option option, string pot, int count, bool add = false) {
+        private bool ConsumeOrAdd(Option option, string pot, int count, bool add = false) {
             string select = "SELECT * FROM Options WHERE (pot = $pt) AND (opt = $ot)";
             SqliteCommand selectCommand = new SqliteCommand(select, this.connection);
             selectCommand.Parameters.AddWithValue("$pt", pot);
@@ -64,7 +100,7 @@ namespace HTCPCP_Server.Database.Implementations
 
             try
             {
-                var reader = await selectCommand.ExecuteReaderAsync();
+                var reader = selectCommand.ExecuteReader();
                 if (reader.Read())
                 {
                     var cnt = reader.GetInt32(2);
@@ -91,7 +127,7 @@ namespace HTCPCP_Server.Database.Implementations
                     insertCommand.Parameters.AddWithValue("$ot", option.ToString());
                     insertCommand.Parameters.AddWithValue("$ct", cnt);
 
-                    await insertCommand.ExecuteNonQueryAsync();
+                    insertCommand.ExecuteNonQuery();
                 }
                 else
                 {
@@ -125,7 +161,7 @@ namespace HTCPCP_Server.Database.Implementations
             {
                 string getCommand = "SELECT * FROM Options";
                 SqliteCommand get = new SqliteCommand(getCommand, this.connection);
-                var reader = await get.ExecuteReaderAsync();
+                var reader = await get.ExecuteReaderAsync().ConfigureAwait(false);
                 while(reader.Read())
                 {
                     // get value for pot (null if not yet created) and add or create dictionary. Then add it to res, if it is not already part of it
@@ -180,7 +216,7 @@ namespace HTCPCP_Server.Database.Implementations
             create = new SqliteCommand(createCommand, this.connection, transaction);
             try
             {
-                await drop.ExecuteNonQueryAsync();
+                await drop.ExecuteNonQueryAsync().ConfigureAwait(false);
             }
             catch (SqliteException e)
             {
@@ -198,7 +234,7 @@ namespace HTCPCP_Server.Database.Implementations
 
             try
             {
-                await create.ExecuteNonQueryAsync();
+                await create.ExecuteNonQueryAsync().ConfigureAwait(false);
             }
             catch (SqliteException e)
             {

@@ -1,5 +1,6 @@
 ﻿using HTCPCP_Server.Database.Implementations;
 using HTCPCP_Server.Database.Interfaces;
+using HTCPCP_Server.Hardware.Implementations;
 using HTCPCP_Server.Helpers;
 using HTCPCP_Server.Logging;
 using HTCPCP_Server.Server.Implementations;
@@ -171,7 +172,14 @@ internal class Program
 
         var server = new Server();
         var dbdriver = new SQLiteDriver();
-        if (server.Start(port.Value, dbdriver))
+
+        var potDict = new Dictionary<string, Tuple<int, bool>>();
+        potDict.Add("pot-0", new Tuple<int, bool>(1, false));
+        potDict.Add("pot-1", new Tuple<int, bool>(10, false));
+
+        var coffee = new SimulatedGPIOCoffeeMaker(potDict);
+
+        if (server.Start(port.Value, dbdriver, coffee))
         {
             while (true)
             {
@@ -180,7 +188,11 @@ internal class Program
                 {
                     server.Stop();
                     break;
+                }else if(res == HTCPCP_Server.Enumerations.Command.RELOAD)
+                {
+                    ReloadCoffeeCommand.ReloadCoffee(dbdriver);
                 }
+
             }
         }
     }

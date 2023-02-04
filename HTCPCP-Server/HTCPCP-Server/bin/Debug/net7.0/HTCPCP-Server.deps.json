@@ -11,7 +11,8 @@
           "Microsoft.Data.Sqlite": "7.0.1",
           "SQLite": "3.13.0",
           "Spectre.Console": "0.45.0",
-          "System.CommandLine": "2.0.0-beta4.22272.1"
+          "System.CommandLine": "2.0.0-beta4.22272.1",
+          "System.Device.Gpio": "2.2.0"
         },
         "runtime": {
           "HTCPCP-Server.dll": {}
@@ -266,6 +267,14 @@
           }
         }
       },
+      "System.Device.Gpio/2.2.0": {
+        "runtime": {
+          "lib/net6.0/System.Device.Gpio.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.200.22.47910"
+          }
+        }
+      },
       "System.Memory/4.5.5": {}
     }
   },
@@ -337,6 +346,13 @@
       "sha512": "sha512-1uqED/q2H0kKoLJ4+hI2iPSBSEdTuhfCYADeJrAqERmiGQ2NNacYKRNEQ+gFbU4glgVyK8rxI+ZOe1onEtr/Pg==",
       "path": "system.commandline/2.0.0-beta4.22272.1",
       "hashPath": "system.commandline.2.0.0-beta4.22272.1.nupkg.sha512"
+    },
+    "System.Device.Gpio/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ShuBDkL/QlQvaeUXcTvtY8xnb0U/ueisVw3VcIgybmrHAl4BiQ/oZEi8yQFzb/xlzDc12AZ/J1oUE9AawV7Yag==",
+      "path": "system.device.gpio/2.2.0",
+      "hashPath": "system.device.gpio.2.2.0.nupkg.sha512"
     },
     "System.Memory/4.5.5": {
       "type": "package",

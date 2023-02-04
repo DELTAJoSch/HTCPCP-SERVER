@@ -1,8 +1,10 @@
 ﻿using HTCPCP_Server.Logging.Implementations;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,10 +17,34 @@ namespace HTCPCP_Server.Logging
     {
         public static bool IsVerbose { get; set; }
 
+        private static bool blocked = false;
+        private static List<Action> actions = new List<Action>();
+
         /// <summary>
         /// The loggers the log uses
         /// </summary>
         private static List<ILogger> loggers = new List<ILogger>() { new ConsoleLog(false) };
+
+        /// <summary>
+        /// blocks the log. All messages will be queued and wait for unblock
+        /// </summary>
+        public static void Block()
+        {
+            blocked = true;
+        }
+
+        /// <summary>
+        /// Unblocks the Logs and writes all stored messages out
+        /// </summary>
+        public static void Unblock()
+        {
+            blocked = false;
+            foreach(var act in actions)
+            {
+                act.Invoke();
+            }
+            actions.Clear();
+        }
 
         /// <summary>
         /// Setup the loggers
@@ -35,7 +61,14 @@ namespace HTCPCP_Server.Logging
         /// <param name="message">The message to log</param>
         public static void Info(string message)
         {
-            loggers.ForEach(logger => logger.Info(message));
+            if (blocked)
+            {
+                actions.Add(() => Info(message));
+            }
+            else
+            {
+                loggers.ForEach(logger => logger.Info(message));
+            }
         }
 
         /// <summary>
@@ -44,8 +77,21 @@ namespace HTCPCP_Server.Logging
         /// <param name="message">The message to log</param>
         public static void Verbose(string message)
         {
-            if(IsVerbose)
-                loggers.ForEach(logger => logger.Info(message + "\nCMD> "));
+            if (IsVerbose)
+            {
+                if (blocked)
+                {
+                    actions.Add(() => {
+                        loggers.ForEach(logger => logger.Info(message));
+                        AnsiConsole.Write("CMD> ");
+                    });
+                }
+                else
+                {
+                    loggers.ForEach(logger => logger.Info(message));
+                    AnsiConsole.Write("CMD> ");
+                }
+            }
         }
 
         /// <summary>
@@ -54,7 +100,14 @@ namespace HTCPCP_Server.Logging
         /// <param name="message">The message to log</param>
         public static void Warn(string message) 
         {
-            loggers.ForEach((logger) => logger.Warn(message));
+            if (blocked)
+            {
+                actions.Add(() => Warn(message));
+            }
+            else
+            {
+                loggers.ForEach((logger) => logger.Warn(message));
+            }
         }
 
         /// <summary>
@@ -63,7 +116,14 @@ namespace HTCPCP_Server.Logging
         /// <param name="message">The message to log</param>
         public static void Error(string message)
         {
-            loggers.ForEach((log) => log.Error(message));
+            if (blocked)
+            {
+                actions.Add(() => Error(message));
+            }
+            else
+            {
+                loggers.ForEach((logger) => logger.Warn(message));
+            }
         }
 
         /// <summary>
@@ -72,7 +132,14 @@ namespace HTCPCP_Server.Logging
         /// <param name="message">The message to log</param>
         public static void Fatal(string message)
         {
-            loggers.ForEach((log) => log.Fatal(message));
+            if (blocked)
+            {
+                actions.Add(() => Fatal(message));
+            }
+            else
+            {
+                loggers.ForEach((log) => log.Fatal(message));
+            }
         }
 
         /// <summary>
@@ -81,7 +148,14 @@ namespace HTCPCP_Server.Logging
         /// <param name="message">The message to log</param>
         public static void Debug(string message)
         {
-            loggers.ForEach((log) => log.Debug(message));
+            if (blocked)
+            {
+                actions.Add(() => Debug(message));
+            }
+            else
+            {
+                loggers.ForEach((log) => log.Debug(message));
+            }
         }
 
         /// <summary>
@@ -91,7 +165,14 @@ namespace HTCPCP_Server.Logging
         /// <param name="exception">the exception to log</param>
         public static void Fatal(string message, Exception exception)
         {
-            loggers.ForEach((log) => log.Fatal(message, exception));
+            if (blocked)
+            {
+                actions.Add(() => Fatal(message, exception));
+            }
+            else
+            {
+                loggers.ForEach((log) => log.Fatal(message, exception));
+            }
         }
     }
 }

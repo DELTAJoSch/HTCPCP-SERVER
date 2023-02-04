@@ -11,6 +11,7 @@ namespace HTCPCP_Server.Enumerations
         NOCOMMAND = 0,
         COMUNKNWON = 1,
         COMEXIT = 2,
-        COMCLEAR = 3
+        COMCLEAR = 3,
+        RELOAD = 4
     }
 }

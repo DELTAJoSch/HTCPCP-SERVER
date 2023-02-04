@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
-	<additions pot="NAME">
+	<additions pot="pot-1">
 		<addition type="MilkCream">5</addition>
 		<addition type="MilkWholeMilk">2</addition>
 		<addition type="MilkHalfAndHalf">4</addition>
@@ -15,5 +15,23 @@
 		<addition type="AlcoholRum">1</addition>
 		<addition type="AlcoholKahlua">0</addition>
 		<addition type="AlcoholAquavit">5</addition>
+		<addition type="Coffee">15</addition>
+	</additions>
+	<additions pot="pot-0">
+		<addition type="MilkCream">5</addition>
+		<addition type="MilkWholeMilk">2</addition>
+		<addition type="MilkHalfAndHalf">4</addition>
+		<addition type="MilkPartSkim">50</addition>
+		<addition type="MilkSkim">10</addition>
+		<addition type="MilkNonDairy">0</addition>
+		<addition type="SyrupAlmond">20</addition>
+		<addition type="SyrupVanilla">0</addition>
+		<addition type="SyrupRaspberry">6</addition>
+		<addition type="SyrupChocolate">900</addition>
+		<addition type="AlcoholWhisky">100000</addition>
+		<addition type="AlcoholRum">1</addition>
+		<addition type="AlcoholKahlua">0</addition>
+		<addition type="AlcoholAquavit">5</addition>
+		<addition type="Coffee">10</addition>
 	</additions>
 </options>

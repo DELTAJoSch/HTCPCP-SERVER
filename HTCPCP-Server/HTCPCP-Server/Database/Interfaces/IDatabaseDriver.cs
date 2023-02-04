@@ -21,7 +21,7 @@ namespace HTCPCP_Server.Database.Interfaces
         /// <param name="pot">The pot to consume from</param>
         /// <returns>Returns true if possible</returns>
         /// <exception cref="ConnectionLostException">if connection is lost</exception>
-        Task<bool> Consume(Option option, string pot);
+        bool Consume(Option option, string pot);
 
         /// <summary>
         /// Consumes multiple elements of option from pot
@@ -33,7 +33,19 @@ namespace HTCPCP_Server.Database.Interfaces
         /// <returns>Returns true if possible</returns>
         /// <exception cref="ArgumentOutOfRangeException"> if count is < 1</exception>
         /// <exception cref="ConnectionLostException">if connection is lost</exception>
-        Task<bool> Consume(Option option, string pot, int count);
+        bool Consume(Option option, string pot, int count);
+
+        /// <summary>
+        /// Check wether consumption is possible
+        /// PRE-CONDITION: count must be larger than 0
+        /// </summary>
+        /// <param name="option">The option to consume</param>
+        /// <param name="pot">The pot to consume from</param>
+        /// <param name="count">The count to consume</param>
+        /// <returns>Returns true if possible</returns>
+        /// <exception cref="ArgumentOutOfRangeException"> if count is < 1</exception>
+        /// <exception cref="ConnectionLostException">if connection is lost</exception>
+        bool CheckAvailable(Option option, string pot, int count);
 
         /// <summary>
         /// Increases number of available uses for option of pot
@@ -43,7 +55,7 @@ namespace HTCPCP_Server.Database.Interfaces
         /// <param name="count">Count of added options (Default: 1)</param>
         /// <exception cref="ArgumentOutOfRangeException"> if count is < 1</exception>
         /// <exception cref="ConnectionLostException">if connection is lost</exception>
-        Task Add(Option option, string pot, int count = 1);
+        void Add(Option option, string pot, int count = 1);
 
         /// <summary>
         /// Gets the entire database as a Dict(pot --> Dict(option --> count))

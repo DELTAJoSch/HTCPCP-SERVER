@@ -34,12 +34,12 @@ namespace HTCPCP_Server.Database.Implementations
         /// <exception cref="NotImplementedException"></exception>
         public async Task<bool> Load(FileInfo file)
         {
-            var dict = await this.ReadFile(file);
+            var dict = await this.ReadFile(file).ConfigureAwait(false);
 
             if (dict == null)
                 return false;
 
-            return await this.driver.InitDb(dict);
+            return await this.driver.InitDb(dict).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -82,6 +82,15 @@ namespace HTCPCP_Server.Database.Implementations
                                     if (add.Name == "addition")
                                     {
                                         this.parseAddition(add, potDict);
+                                    }
+                                    else if (add.Name == "coffee")
+                                    {
+                                        int count;
+                                        if (!int.TryParse(add.InnerText, out count))
+                                        {
+                                            Log.Info($"NaN: {add.InnerText}");
+                                        }
+                                        potDict.Add(Enumerations.Option.Coffee, count);
                                     }
                                 }
 
@@ -172,29 +181,29 @@ namespace HTCPCP_Server.Database.Implementations
                 return false;
             }
 
-            return await this.WriteToFile(dict, file);
+            return await this.WriteToFile(dict, file).ConfigureAwait(false);
         }
 
         private async Task<bool> WriteToFile(Dictionary<string, Dictionary<Enumerations.Option, int>> dict, FileInfo file)
         {
             using (StreamWriter writer = new StreamWriter(file.FullName, false))
             {
-                await writer.WriteLineAsync("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-                await writer.WriteLineAsync("<options>");
+                await writer.WriteLineAsync("<?xml version=\"1.0\" encoding=\"UTF-8\"?>").ConfigureAwait(false);
+                await writer.WriteLineAsync("<options>").ConfigureAwait(false);
 
                 dict.AsEnumerable()
                     .ToList()
                     .ForEach(async pot =>
                     {
-                        await writer.WriteLineAsync($"\t<additions pot=\"{pot.Key}\">");
+                        await writer.WriteLineAsync($"\t<additions pot=\"{pot.Key}\">").ConfigureAwait(false);
 
                         pot.Value.AsEnumerable()
                             .ToList()
                             .ForEach(async option =>
-                                await writer.WriteLineAsync($"\t\t<addition type=\"{option.Key}\">{option.Value}</addition>")
+                                await writer.WriteLineAsync($"\t\t<addition type=\"{option.Key}\">{option.Value}</addition>").ConfigureAwait(false)
                             );
 
-                        await writer.WriteLineAsync($"\t</additions>");
+                        await writer.WriteLineAsync($"\t</additions>").ConfigureAwait(false);
 
                     });
 

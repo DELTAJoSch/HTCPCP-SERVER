@@ -17,6 +17,7 @@ namespace HTCPCP_Server.Enumerations
         NotAcceptable = 406,
         Teapot = 416,
         UnavailableForLegalReasons = 451,
-        NotImplemented = 501
+        NotImplemented = 501,
+        InternalServerError = 500
     }
 }

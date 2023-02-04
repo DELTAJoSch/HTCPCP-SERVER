@@ -15,74 +15,101 @@ namespace HTCPCP_Server.Helpers
     internal static class RequestParser
     {
         /// <summary>
-        /// Parses a htcpcp request string into a request container
+        /// Parses a request line
         /// </summary>
-        /// <param name="requeststring">The request string</param>
-        /// <returns>Returns the parsed request</returns>
-        public static Request Parse(string requeststring)
+        /// <param name="requestline">The request line to parse</param>
+        /// <returns>Returns the request in a parsed form</returns>
+        public static Request ParseRequest(string requestline)
         {
-            string[] lines = requeststring.Split("\r\n");
-
             bool version = false;
             string resource = "";
-            var type = ParseRequestLine(lines[0], out version, out resource);
+            var type = ParseRequestLine(requestline, out version, out resource);
 
-            if(!version)
+            if (!version)
             {
                 return new Request(type, StatusCode.BadRequest);
             }
 
             switch (type)
             {
-                case HTCPCPType.Brew:
-                    break;
                 case HTCPCPType.Post:
                     return new Request(type, StatusCode.Deprecated);
-                case HTCPCPType.Propfind | HTCPCPType.Get | HTCPCPType.When:
+                case HTCPCPType.When:
                     return new Request(type, StatusCode.NotImplemented);
-                case HTCPCPType.Put | HTCPCPType.Unknown:
+                case HTCPCPType.Propfind:
+                    return new Request(type, StatusCode.NotImplemented);
+                case HTCPCPType.Get:
+                    return new Request(type, StatusCode.NotImplemented);
+                case HTCPCPType.Unknown:
                     return new Request(type, StatusCode.BadRequest);
-            }
-
-            int bodyIndex = 0;
-            bool okContentType = false;
-            for(int i = 1; i < lines.Length; i++)
-            {
-                okContentType |= (lines[i] == "Content-Type: message/coffeepot");
-                if (lines[i] == "Content-Type: message/teapot")
-                    return new Request(type, StatusCode.Teapot);
-
-                if (lines[i] == "\n\r")
-                {
-                    bodyIndex = i;
-                }
-            }
-
-            if (!okContentType)
-            {
-                return new Request(type, StatusCode.BadRequest);
-            }
-
-            /*if(bodyIndex == lines.Length - 2)
-            {
-                var bd = lines[++bodyIndex];
-                if (bd != "coffee-message-body = start" && bd != "coffee-message-body = stop")
+                case HTCPCPType.Put:
                     return new Request(type, StatusCode.BadRequest);
-
+                default:
+                    break;
             }
-            else
-            {
-                return new Request(type, StatusCode.BadRequest);
-            }*/
 
             List<Tuple<Option, int>> additions = new List<Tuple<Option, int>>();
-            string pot = ""; 
-            if(!ParseResource(resource, additions, out pot))
+            string pot = "";
+            if (!ParseResource(resource, additions, out pot))
             {
                 return new Request(type, StatusCode.BadRequest);
             }
 
             return new Request(type, pot, additions);
+        }
+
+        /// <summary>
+        /// Parses the header fields. Looks for message type and content length
+        /// </summary>
+        /// <param name="header">The header string</param>
+        /// <param name="contentLength">TThe content Length</param>
+        /// <returns>Returns true if the message type is message/coffeepot, otherwise false</returns>
+        public static bool ParseHeaderFields(string header, out int contentLength)
+        {
+            contentLength = 0;
+            bool contentType = false;
+            string[] fields = header.Split("\r\n");
+
+            foreach (string field in fields)
+            {
+                if(field == "Content-Type: message/coffeepot")
+                {
+                    contentType = true;
+                }
+
+                if(field.Contains("Content-Length: ")) 
+                { 
+                    if(!int.TryParse(field.AsSpan(16), out contentLength))
+                    {
+                        contentLength = 0;
+                    }
+                }
+            }
+
+            return contentType;
+        }
+
+        /// <summary>
+        /// Checks whether the body is conform with message/coffeepot
+        /// </summary>
+        /// <param name="body">The body</param>
+        /// <param name="start">This out parameter is set to true if the command is to start the brewing process</param>
+        /// <returns>Returns true if it is conform with message/coffeepot</returns>
+        public static bool BodyConform(string body, out bool start)
+        {
+            body = body.Trim('\0');
+            if(body == "coffee-message-body = stop")
+            {
+                start = false;
+                return true;
+            }else if(body == "coffee-message-body = start")
+            {
+                start = true;
+                return true;
+            }
+
+            start = false;
+            return false;
         }
 
         /// <summary>
@@ -92,7 +119,7 @@ namespace HTCPCP_Server.Helpers
         /// <param name="version">out parameter, true if the version is correct</param>
         /// <param name="resource">out parameter, contains the resource string if available</param>
         /// <returns></returns>
-        private static HTCPCPType ParseRequestLine(string request, out bool version, out string resource)
+        public static HTCPCPType ParseRequestLine(string request, out bool version, out string resource)
         {
             request = request.Replace("\r\n", "");
             string[] parts = request.Split(' ');
@@ -139,7 +166,7 @@ namespace HTCPCP_Server.Helpers
         /// <param name="resource">The resource string to parse</param>
         /// <param name="additions">The additions list</param>
         /// <returns>Returns true if the resource was parsable</returns>
-        private static bool ParseResource(string resource, List<Tuple<Option, int>> additions, out string pot)
+        public static bool ParseResource(string resource, List<Tuple<Option, int>> additions, out string pot)
         {
             resource = HttpUtility.UrlDecode(resource, System.Text.UnicodeEncoding.UTF8);
             pot = "pot-0";
@@ -184,7 +211,7 @@ namespace HTCPCP_Server.Helpers
                 }
                 else
                 {
-                    pot = identifierSplit[1];
+                    pot = identifierSplit[1].Substring(1);
                 }
             }
             
@@ -218,7 +245,7 @@ namespace HTCPCP_Server.Helpers
         /// </summary>
         /// <param name="addition">The addition to parse</param>
         /// <returns>Returns the corresponding enum</returns>
-        private static Option ParseAddition(string addition)
+        public static Option ParseAddition(string addition)
         {
             switch (addition)
             {
