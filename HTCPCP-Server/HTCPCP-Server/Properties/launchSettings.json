@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "start": {
+      "commandName": "Project",
+      "commandLineArgs": "start -v"
+    },
+    "load": {
+      "commandName": "Project",
+      "commandLineArgs": "load -v"
+    },
+    "export": {
+      "commandName": "Project",
+      "commandLineArgs": "export -v"
+    }
+  }
+}
