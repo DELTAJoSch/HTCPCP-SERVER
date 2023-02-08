@@ -174,10 +174,9 @@ internal class Program
         var dbdriver = new SQLiteDriver();
 
         var potDict = new Dictionary<string, Tuple<int, bool>>();
-        potDict.Add("pot-0", new Tuple<int, bool>(1, false));
-        potDict.Add("pot-1", new Tuple<int, bool>(10, false));
+        potDict.Add("pot-0", new Tuple<int, bool>(12, false));
 
-        var coffee = new SimulatedGPIOCoffeeMaker(potDict);
+        var coffee = new GPIOFilterCoffeeMaker(potDict);
 
         if (server.Start(port.Value, dbdriver, coffee))
         {
