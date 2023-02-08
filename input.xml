@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<options>
+    <additions pot="pot-0">
+        <addition type="Milk/Cream">0</addition>
+        <addition type="Milk/Whole-Milk">0</addition>
+        <addition type="Milk/Half-and-Half">0</addition>
+        <addition type="Milk/Part-Skim">0</addition>
+        <addition type="Milk/Skim">0</addition>
+        <addition type="Milk/Non-dairy">0</addition>
+        <addition type="Syrup/Almond">0</addition>
+        <addition type="Syrup/Vanilla">0</addition>
+        <addition type="Syrup/Raspberry">0</addition>
+        <addition type="Syrup/Chocolate">0</addition>
+        <addition type="Alcohol/Whisky">0</addition>
+        <addition type="Alcohol/Rum">0</addition>
+        <addition type="Alcohol/Kahlua">0</addition>
+        <addition type="Alcohol/Aquavit">0</addition>
+		<coffee>1</coffee>
+    </additions>
+</options>
